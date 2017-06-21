@@ -412,7 +412,7 @@ if (isset($_POST['enviar_cadastro'])){
 			$cpf = $_POST['cpf'];
 			$rg = $_POST['rg'];
 			$ssp = $_POST['ssp'];
-			$tipo = $_POST['tipo'];
+			$tipo_p = $_POST['tipo'];
 			$limite = $_POST['limite'];
 			$cep = $_POST['cep'];
 			$numero = $_POST['numero'];
@@ -444,17 +444,29 @@ if (isset($_POST['enviar_cadastro'])){
 
 					if($situacao <> "REGULAR") {
 							$limite="0";
-							echo "<script>alert('CPF com situac\u00e3o irregular, limite para fidelidade n\u00e3o aprovado.');</script>";
+                                                        echo "<script type='text/javascript'>
+									$(document).ready(function(){
+									$('#modal-confirmacao').modal('show');
+									});
+								  </script>";
+								  
+								   $titulo = "Cadastro";
+								   $tipo=$cod2;
+								   $msg="<h5>CPF com situação irregular, limite para fidelidade não autorizado</h5>"; 
 					}
-						$sql = "INSERT INTO cadastro_pessoa SET cd_nome='$nome', cd_dt_nascimento='$dt_nascimento', cd_cpf='$cpf', cd_situacao='$situacao', cd_rg='$rg', cd_ssp='$ssp', cd_tipo='$tipo', cd_limite='$limite', cd_cep='$cep',
+						$sql = "INSERT INTO cadastro_pessoa SET cd_nome='$nome', cd_dt_nascimento='$dt_nascimento', cd_cpf='$cpf', cd_situacao='$situacao', cd_rg='$rg', cd_ssp='$ssp', cd_tipo='$tipo_p', cd_limite='$limite', cd_cep='$cep',
 						cd_endereco='$rua, $numero, $complemento', cd_bairro='$bairro', cd_cidade='$cidade', cd_estado='$estado', cd_email='$email', cd_tel_fixo='$fixo', cd_tel_cel='$celular', cd_dt_cadastro=NOW()";
-                        mysqli_query($conn,$sql);
+                                                 mysqli_query($conn,$sql);
 						if(!$sql) die(mysqli_error());
                         else{
-							echo " ";						   
+							 echo "<script type='text/javascript'>
+									$(document).ready(function(){
+									$('#modal-confirmacao').modal('show');
+									});
+								  </script>";						   
 							$titulo = "Cadastro";	
-							 $tipo=$cod1;
-							$msg = "Cadastro de: $nome foi realizado com sucesso!";
+							$tipo=$cod1;
+							$msg = "<h5><p>$nome cadastrado com sucesso!</p><p>Tipo de cadastro: <b>$tipo_p<b></p></h5>";
                         }
                 } else{
                echo "<script type='text/javascript'>
@@ -471,3 +483,26 @@ if (isset($_POST['enviar_cadastro'])){
 
 
 ?>
+
+<div id="modal-confirmacao" class="modal" tabindex="-1">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" onclick="window.location.href = 'dashboard';">&times;</button>
+                <h4 class="blue bigger"><?php echo $titulo ?></h4>
+            </div>
+
+            <div class="modal-body">
+                <p><?php echo $tipo; ?></p>
+                <p><?php echo $msg ?></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm" data-dismiss="modal" onclick="window.location.href = 'dashboard';"><i class="ace-icon fa fa-times"></i>Fechar</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
