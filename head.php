@@ -23,17 +23,17 @@
 		<link rel="stylesheet" href="../assets/css/jquery.gritter.min.css" />
 		<link rel="stylesheet" href="../assets/css/select2.min.css" />
 		<link rel="stylesheet" href="../assets/css/bootstrap-editable.min.css" />
-		<link rel="stylesheet" href="img.css" />
-		
-		
+				
 		<link rel="stylesheet" href="../assets/css/chosen.min.css" />
 		<link rel="stylesheet" href="../assets/css/datepicker.min.css" />
 		<link rel="stylesheet" href="../assets/css/bootstrap-timepicker.min.css" />
 		<link rel="stylesheet" href="../assets/css/daterangepicker.min.css" />
 		<link rel="stylesheet" href="../assets/css/bootstrap-datetimepicker.min.css" />
-		<link rel="stylesheet" href="../assets/css/colorpicker.min.css" />
+                <link rel="stylesheet" href="../assets/css/colorpicker.min.css" />
 
-
+                <link rel="stylesheet" href="../assets/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="../assets/css/jquery.gritter.min.css" />
+                
 		<!-- text fonts -->
 		<link rel="stylesheet" href="../assets/fonts/fonts.googleapis.com.css" />
 

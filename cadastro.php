@@ -358,7 +358,7 @@ include 'consultas.php';
                                             </button>
                                         </div>
                                     </form>
-
+                                     <?php include "modal.php";?>
                                 </div><!-- /.widget-main -->
                             </div><!-- /.widget-body -->
                         </div>
