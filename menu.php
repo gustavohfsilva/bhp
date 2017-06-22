@@ -42,7 +42,7 @@
             </li>
 
 
-            <li class="<?php if ($sec == "Controle") echo "active open"; ?>">
+            <li class="<?php if ($sec=="Controle") echo "active open"; ?>">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-briefcase "></i>
                     <span class="menu-text"> Controle </span>
@@ -62,8 +62,8 @@
                         <b class="arrow"></b>
                     </li>
 
-                    <li class="<?php if ($page == "Desistencias") echo active ?>">
-                        <a href="lista?id=<?php echo $cx_id ?>">
+                    <li class="<?php if ($page == "Desist&ecirc;ncias") echo active ?>">
+                        <a href="lista?filter=D">
                             <i class="menu-icon fa fa-ban red"></i>
                             Desist&ecirc;ncias
                         </a>
@@ -81,7 +81,7 @@
                     </li>
                     
                      <li class="<?php if ($page == "Jogadores") echo active ?>">
-                        <a href="lista?id=<?php echo $cx_id ?>">
+                        <a href="lista?filter=J">
                             <i class="menu-icon fa fa-gamepad yellow"></i>
                             Jogadores
                         </a>

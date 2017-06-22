@@ -1,9 +1,15 @@
-- Controle de mesa
 - Controle de jogador por mesa
 	* Já existe uma listagem, onde é possível visualizar a mesa e o tempo que o jogado se encontra
 - Não deixar o jogador sair com menos de uma hora
 	* Adicionada condição para que o jogador não saia da mesa do cash "recebendo dinheiro" com menos de uma hora
-
+- Adicionar formas de pagamento
+	* Foi inserido novas formas de pagamento e limitado as opções que aparecem para o cashout
+- Controle de mesa
+	- Jogador que está na fila, trocar de mesa
+- Financeiro
+	- Apresentar caixas de outros dias
 	
-	
-	
+/////////	
+	- Quantidade de fichas no caixa
+- Extrato
+- Controle de entrada e saida fidelidade

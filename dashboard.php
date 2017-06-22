@@ -10,6 +10,8 @@ $hoje = date("Y-m-d");
 
 include "consultas.php";
 ?>
+
+
 <body>
     <div class="main-container" id="main-container">
         <script type="text/javascript">
@@ -720,12 +722,12 @@ include "consultas.php";
                                                                               $data = round(abs($from_time - $to_time)/60);
                                                                               $data_e = round(abs($from_time - $entrada_time)/60); */
                                                                             echo "<tbody>
-															<tr>
-																<td><b>" . $nome . "</td>
-																<td><b></td>";
+										<tr>
+											<td>/td>
+											<td></td>";
                                                                             ?>
                                                                             <td nowrap>
-                                                                                <a href="" title="<?php //echo $e_data;       ?>" >
+                                                                                <a href="" title="" >
                                                                                     <i class="ace-icon fa fa-clock-o"></i>
                                                                                 </a>
                                                                                 <?php /*
@@ -807,10 +809,28 @@ include "consultas.php";
                                                     </div>
                                                 </div><!-- /.#member-tab -->
 
+<?php
 
+$sql = "select DISTINCT cd_id, cd_nome from cadastro_pessoa where cd_tipo='Fidelidade'";
+$qry = mysqli_query($conn, $sql);
+
+while ($ar = mysqli_fetch_array($qry)) {
+    $a_id = $ar['cd_id'];
+    $a_nome = $ar['cd_nome'];
+    
+   $consulta_ac[]="{\"$a_nome \",}";
+    }
+
+$listagem_ac = implode(", ",$contula_ac);
+echo $listagem_ac;
+    
+?>
+                                                
                                                 <div class="row">
 
                                                     <!-- Modal Adicionar Jogador -->
+                                                   
+                                                     
 
                                                     <div id="modal-form" class="modal" tabindex="-1">
                                                         <form method="post">
@@ -827,15 +847,15 @@ include "consultas.php";
                                                                             <div class="col-xs-12 col-sm-7">
                                                                                 <div class="form-group">
                                                                                     <label class="col-sm control-label no-padding-right" for="form-field-1"> Nome </label>
-
                                                                                     <div>
-                                                                                        <input type="text" id="form-field-1-1" name="nome" style="text-transform:uppercase" class="form-control" required="">	
-
+                                                                                        <input id="tags" name="nome" type="text"  style="text-transform:uppercase" class="typeahead form-control" required="">	
                                                                                     </div>
                                                                                 </div>
 
                                                                             </div>	
                                                                         </div>
+
+
 
                                                                         <div class="space-4"></div>
 
@@ -924,6 +944,7 @@ include "consultas.php";
                                                                                         <?php } ?>
                                                                                     </select>
                                                                                     <input type="hidden" name="livre" value="<?php echo $livre; ?>">
+
                                                                                 </div>
 
                                                                             </div>
@@ -1293,7 +1314,8 @@ include "consultas.php";
                                                                                     &nbsp;&nbsp;&nbsp;<i class="ace fa fa-angle-double-right "></i> R$ <b><?php echo $valor ?></b><br>
                                                                                     &nbsp;&nbsp;&nbsp;<i class="ace fa fa-angle-double-right "></i> Pagamento: 
                                                                                     <?php
-                                                                                    if ($fpg === Dinheiro) {
+                                                                                    if ($fpg == Dinheiro or Cartao or Voucher or Cortesia or Cheque or Transf) {
+                                                                                        $fpg = utf8_encode($fpg);
                                                                                         echo "<span class=\"green bolder\">$fpg</span>";
                                                                                     } else {
                                                                                         echo "<span class=\"red bolder\">$fpg</span>";
@@ -1427,7 +1449,7 @@ include "consultas.php";
               <script src="assets/js/excanvas.min.js"></script>
             <![endif]-->
             <script src="../assets/js/jquery-ui.custom.min.js"></script>
-            <script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+            
             <script src="../assets/js/jquery.easypiechart.min.js"></script>
             <script src="../assets/js/jquery.sparkline.min.js"></script>
             <script src="../assets/js/jquery.flot.min.js"></script>
@@ -1435,7 +1457,7 @@ include "consultas.php";
             <script src="../assets/js/jquery.flot.resize.min.js"></script>
 
             <script src="../assets/js/jquery-ui.custom.min.js"></script>
-            <script src="../assets/js/jquery.ui.touch-punch.min.js"></script>
+            
             <script src="../assets/js/chosen.jquery.min.js"></script>
             <script src="../assets/js/fuelux.spinner.min.js"></script>
             <script src="../assets/js/bootstrap-datepicker.min.js"></script>
@@ -1455,6 +1477,248 @@ include "consultas.php";
             <script src="../assets/js/ace.min.js"></script>
 
             <!-- inline scripts related to this page -->
+            <script type="text/javascript">
+			jQuery(function($) {
+			
+				$( "#datepicker" ).datepicker({
+					showOtherMonths: true,
+					selectOtherMonths: false,
+					//isRTL:true,
+			
+					
+					/*
+					changeMonth: true,
+					changeYear: true,
+					
+					showButtonPanel: true,
+					beforeShow: function() {
+						//change button colors
+						var datepicker = $(this).datepicker( "widget" );
+						setTimeout(function(){
+							var buttons = datepicker.find('.ui-datepicker-buttonpane')
+							.find('button');
+							buttons.eq(0).addClass('btn btn-xs');
+							buttons.eq(1).addClass('btn btn-xs btn-success');
+							buttons.wrapInner('<span class="bigger-110" />');
+						}, 0);
+					}
+			*/
+				});
+			
+			
+				//override dialog's title function to allow for HTML titles
+				$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+					_title: function(title) {
+						var $title = this.options.title || '&nbsp;'
+						if( ("title_html" in this.options) && this.options.title_html == true )
+							title.html($title);
+						else title.text($title);
+					}
+				}));
+			
+				$( "#id-btn-dialog1" ).on('click', function(e) {
+					e.preventDefault();
+			
+					var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-check'></i> jQuery UI Dialog</h4></div>",
+						title_html: true,
+						buttons: [ 
+							{
+								text: "Cancel",
+								"class" : "btn btn-minier",
+								click: function() {
+									$( this ).dialog( "close" ); 
+								} 
+							},
+							{
+								text: "OK",
+								"class" : "btn btn-primary btn-minier",
+								click: function() {
+									$( this ).dialog( "close" ); 
+								} 
+							}
+						]
+					});
+			
+					/**
+					dialog.data( "uiDialog" )._title = function(title) {
+						title.html( this.options.title );
+					};
+					**/
+				});
+			
+			
+				$( "#id-btn-dialog2" ).on('click', function(e) {
+					e.preventDefault();
+				
+					$( "#dialog-confirm" ).removeClass('hide').dialog({
+						resizable: false,
+						width: '320',
+						modal: true,
+						title: "<div class='widget-header'><h4 class='smaller'><i class='ace-icon fa fa-exclamation-triangle red'></i> Empty the recycle bin?</h4></div>",
+						title_html: true,
+						buttons: [
+							{
+								html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Delete all items",
+								"class" : "btn btn-danger btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+							,
+							{
+								html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancel",
+								"class" : "btn btn-minier",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+						]
+					});
+				});
+			
+			
+				
+				//autocomplete
+				 var availableTags = [
+					"Gustavo"
+				];
+				$( "#tags" ).autocomplete({
+					source: availableTags
+				});
+			
+				//custom autocomplete (category selection)
+				$.widget( "custom.catcomplete", $.ui.autocomplete, {
+					_create: function() {
+						this._super();
+						this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+					},
+					_renderMenu: function( ul, items ) {
+						var that = this,
+						currentCategory = "";
+						$.each( items, function( index, item ) {
+							var li;
+							if ( item.category != currentCategory ) {
+								ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+								currentCategory = item.category;
+							}
+							li = that._renderItemData( ul, item );
+								if ( item.category ) {
+								li.attr( "aria-label", item.category + " : " + item.label );
+							}
+						});
+					}
+				});
+				
+				 var data = [
+					{ label: "anders", category: "" },
+					{ label: "andreas", category: "" },
+					{ label: "antal", category: "" },
+					{ label: "annhhx10", category: "Products" },
+					{ label: "annk K12", category: "Products" },
+					{ label: "annttop C13", category: "Products" },
+					{ label: "anders andersson", category: "People" },
+					{ label: "andreas andersson", category: "People" },
+					{ label: "andreas johnson", category: "People" }
+				];
+				$( "#search" ).catcomplete({
+					delay: 0,
+					source: data
+				});
+				
+				
+				//tooltips
+				$( "#show-option" ).tooltip({
+					show: {
+						effect: "slideDown",
+						delay: 250
+					}
+				});
+			
+				$( "#hide-option" ).tooltip({
+					hide: {
+						effect: "explode",
+						delay: 250
+					}
+				});
+			
+				$( "#open-event" ).tooltip({
+					show: null,
+					position: {
+						my: "left top",
+						at: "left bottom"
+					},
+					open: function( event, ui ) {
+						ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast" );
+					}
+				});
+			
+			
+				//Menu
+				$( "#menu" ).menu();
+			
+			
+				//spinner
+				var spinner = $( "#spinner" ).spinner({
+					create: function( event, ui ) {
+						//add custom classes and icons
+						$(this)
+						.next().addClass('btn btn-success').html('<i class="ace-icon fa fa-plus"></i>')
+						.next().addClass('btn btn-danger').html('<i class="ace-icon fa fa-minus"></i>')
+						
+						//larger buttons on touch devices
+						if('touchstart' in document.documentElement) 
+							$(this).closest('.ui-spinner').addClass('ui-spinner-touch');
+					}
+				});
+			
+				//slider example
+				$( "#slider" ).slider({
+					range: true,
+					min: 0,
+					max: 500,
+					values: [ 75, 300 ]
+				});
+			
+			
+			
+				//jquery accordion
+				$( "#accordion" ).accordion({
+					collapsible: true ,
+					heightStyle: "content",
+					animate: 250,
+					header: ".accordion-header"
+				}).sortable({
+					axis: "y",
+					handle: ".accordion-header",
+					stop: function( event, ui ) {
+						// IE doesn't register the blur when sorting
+						// so trigger focusout handlers to remove .ui-state-focus
+						ui.item.children( ".accordion-header" ).triggerHandler( "focusout" );
+					}
+				});
+				//jquery tabs
+				$( "#tabs" ).tabs();
+				
+				
+				//progressbar
+				$( "#progressbar" ).progressbar({
+					value: 37,
+					create: function( event, ui ) {
+						$(this).addClass('progress progress-striped active')
+							   .children(0).addClass('progress-bar progress-bar-success');
+					}
+				});
+			
+				
+				//selectmenu
+				 $( "#number" ).css('width', '200px')
+				.selectmenu({ position: { my : "left bottom", at: "left top" } })
+					
+			});
+		</script>
+            
             <script type="text/javascript">
                 jQuery(function ($) {
                     $('.easy-pie-chart.percentage').each(function () {
@@ -1678,269 +1942,7 @@ include "consultas.php";
 
                 })
             </script>
-            <script type="text/javascript">
-                jQuery(function ($) {
-
-                    $("#datepicker").datepicker({
-                        showOtherMonths: true,
-                        selectOtherMonths: false,
-                        //isRTL:true,
-
-
-                        /*
-                         changeMonth: true,
-                         changeYear: true,
-                         
-                         showButtonPanel: true,
-                         beforeShow: function() {
-                         //change button colors
-                         var datepicker = $(this).datepicker( "widget" );
-                         setTimeout(function(){
-                         var buttons = datepicker.find('.ui-datepicker-buttonpane')
-                         .find('button');
-                         buttons.eq(0).addClass('btn btn-xs');
-                         buttons.eq(1).addClass('btn btn-xs btn-success');
-                         buttons.wrapInner('<span class="bigger-110" />');
-                         }, 0);
-                         }
-                         */
-                    });
-
-
-                    //override dialog's title function to allow for HTML titles
-                    $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
-                        _title: function (title) {
-                            var $title = this.options.title || '&nbsp;'
-                            if (("title_html" in this.options) && this.options.title_html == true)
-                                title.html($title);
-                            else
-                                title.text($title);
-                        }
-                    }));
-
-                    $("#id-btn-dialog1").on('click', function (e) {
-                        e.preventDefault();
-
-                        var dialog = $("#dialog-message").removeClass('hide').dialog({
-                            modal: true,
-                            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-check'></i> jQuery UI Dialog</h4></div>",
-                            title_html: true,
-                            buttons: [
-                                {
-                                    text: "Cancel",
-                                    "class": "btn btn-minier",
-                                    click: function () {
-                                        $(this).dialog("close");
-                                    }
-                                },
-                                {
-                                    text: "OK",
-                                    "class": "btn btn-primary btn-minier",
-                                    click: function () {
-                                        $(this).dialog("close");
-                                    }
-                                }
-                            ]
-                        });
-
-                        /**
-                         dialog.data( "uiDialog" )._title = function(title) {
-                         title.html( this.options.title );
-                         };
-                         **/
-                    });
-
-
-                    $("#id-btn-dialog2").on('click', function (e) {
-                        e.preventDefault();
-
-                        $("#dialog-confirm").removeClass('hide').dialog({
-                            resizable: false,
-                            width: '320',
-                            modal: true,
-                            title: "<div class='widget-header'><h4 class='smaller'><i class='ace-icon fa fa-exclamation-triangle red'></i> Empty the recycle bin?</h4></div>",
-                            title_html: true,
-                            buttons: [
-                                {
-                                    html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Delete all items",
-                                    "class": "btn btn-danger btn-minier",
-                                    click: function () {
-                                        $(this).dialog("close");
-                                    }
-                                }
-                                ,
-                                {
-                                    html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancel",
-                                    "class": "btn btn-minier",
-                                    click: function () {
-                                        $(this).dialog("close");
-                                    }
-                                }
-                            ]
-                        });
-                    });
-
-
-
-                    //autocomplete
-                    var availableTags = [
-                        "ActionScript",
-                        "AppleScript",
-                        "Asp",
-                        "BASIC",
-                        "C",
-                        "C++",
-                        "Clojure",
-                        "COBOL",
-                        "ColdFusion",
-                        "Erlang",
-                        "Fortran",
-                        "Groovy",
-                        "Haskell",
-                        "Java",
-                        "JavaScript",
-                        "Lisp",
-                        "Perl",
-                        "PHP",
-                        "Python",
-                        "Ruby",
-                        "Scala",
-                        "Scheme"
-                    ];
-                    $("#tags").autocomplete({
-                        source: availableTags
-                    });
-
-                    //custom autocomplete (category selection)
-                    $.widget("custom.catcomplete", $.ui.autocomplete, {
-                        _create: function () {
-                            this._super();
-                            this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
-                        },
-                        _renderMenu: function (ul, items) {
-                            var that = this,
-                                    currentCategory = "";
-                            $.each(items, function (index, item) {
-                                var li;
-                                if (item.category != currentCategory) {
-                                    ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
-                                    currentCategory = item.category;
-                                }
-                                li = that._renderItemData(ul, item);
-                                if (item.category) {
-                                    li.attr("aria-label", item.category + " : " + item.label);
-                                }
-                            });
-                        }
-                    });
-
-                    var data = [
-                        {label: "anders", category: ""},
-                        {label: "andreas", category: ""},
-                        {label: "antal", category: ""},
-                        {label: "annhhx10", category: "Products"},
-                        {label: "annk K12", category: "Products"},
-                        {label: "annttop C13", category: "Products"},
-                        {label: "anders andersson", category: "People"},
-                        {label: "andreas andersson", category: "People"},
-                        {label: "andreas johnson", category: "People"}
-                    ];
-                    $("#search").catcomplete({
-                        delay: 0,
-                        source: data
-                    });
-
-
-                    //tooltips
-                    $("#show-option").tooltip({
-                        show: {
-                            effect: "slideDown",
-                            delay: 250
-                        }
-                    });
-
-                    $("#hide-option").tooltip({
-                        hide: {
-                            effect: "explode",
-                            delay: 250
-                        }
-                    });
-
-                    $("#open-event").tooltip({
-                        show: null,
-                        position: {
-                            my: "left top",
-                            at: "left bottom"
-                        },
-                        open: function (event, ui) {
-                            ui.tooltip.animate({top: ui.tooltip.position().top + 10}, "fast");
-                        }
-                    });
-
-
-                    //Menu
-                    $("#menu").menu();
-
-
-                    //spinner
-                    var spinner = $("#spinner").spinner({
-                        create: function (event, ui) {
-                            //add custom classes and icons
-                            $(this)
-                                    .next().addClass('btn btn-success').html('<i class="ace-icon fa fa-plus"></i>')
-                                    .next().addClass('btn btn-danger').html('<i class="ace-icon fa fa-minus"></i>')
-
-                            //larger buttons on touch devices
-                            if ('touchstart' in document.documentElement)
-                                $(this).closest('.ui-spinner').addClass('ui-spinner-touch');
-                        }
-                    });
-
-                    //slider example
-                    $("#slider").slider({
-                        range: true,
-                        min: 0,
-                        max: 500,
-                        values: [75, 300]
-                    });
-
-
-
-                    //jquery accordion
-                    $("#accordion").accordion({
-                        collapsible: true,
-                        heightStyle: "content",
-                        animate: 250,
-                        header: ".accordion-header"
-                    }).sortable({
-                        axis: "y",
-                        handle: ".accordion-header",
-                        stop: function (event, ui) {
-                            // IE doesn't register the blur when sorting
-                            // so trigger focusout handlers to remove .ui-state-focus
-                            ui.item.children(".accordion-header").triggerHandler("focusout");
-                        }
-                    });
-                    //jquery tabs
-                    $("#tabs").tabs();
-
-
-                    //progressbar
-                    $("#progressbar").progressbar({
-                        value: 37,
-                        create: function (event, ui) {
-                            $(this).addClass('progress progress-striped active')
-                                    .children(0).addClass('progress-bar progress-bar-success');
-                        }
-                    });
-
-
-                    //selectmenu
-                    $("#number").css('width', '200px')
-                            .selectmenu({position: {my: "left bottom", at: "left top"}})
-
-                });
-            </script>
+            
             <script type="text/javascript">
                 jQuery(function ($) {
                     $('#id-disable-check').on('click', function () {
@@ -2339,198 +2341,6 @@ include "consultas.php";
 
                 });
             </script>
-            <script type="text/javascript">
-                jQuery(function($) {
-                /**
-                 $('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                 //console.log(e.target.getAttribute("href"));
-                 })
-                 
-                 $('#accordion').on('shown.bs.collapse', function (e) {
-                 //console.log($(e.target).is('#collapseTwo'))
-                 });
-                 */
 
-                $('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                //if($(e.target).attr('href') == "#home") doSomethingNow();
-                })
-
-
-                        /**
-                         //go to next tab, without user clicking
-                         $('#myTab > .active').next().find('> a').trigger('click');
-                         */
-
-
-                        $('#accordion-style').on('click', function(ev){
-                var target = $('input', ev.target);
-                        var which = parseInt(target.val());
-                        if (which == 2) $('#accordion').addClass('accordion-style2');
-                        else $('#accordion').removeClass('accordion-style2');
-                });
-                        //$('[href="#collapseTwo"]').trigger('click');
-
-
-                        var oldie = /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase());
-                        $('.easy-pie-chart.percentage').each(function(){
-                $(this).easyPieChart({
-                barColor: $(this).data('color'),
-                        trackColor: '#EEEEEE',
-                        scaleColor: false,
-                        lineCap: 'butt',
-                        lineWidth: 8,
-                        animate: oldie ? false : 1000,
-                        size:75
-                }).css('color', $(this).data('color'));
-                });
-                        $('[data-rel=tooltip]').tooltip();
-                        $('[data-rel=popover]').popover({html:true});
-                        $('#gritter-regular').on(ace.click_event, function(){
-                $.gritter.add({
-                title: 'This is a regular notice!',
-                        text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="blue">magnis dis parturient</a> montes, nascetur ridiculus mus.',
-                        image: 'assets/avatars/avatar1.png', //in Ace demo dist will be replaced by correct assets path
-                        sticky: false,
-                        time: '',
-                        class_name: (!$('#gritter-light').get(0).checked ? 'gritter-light' : '')
-                });
-                        return false;
-                });
-                        $('#gritter-sticky').on(ace.click_event, function(){
-                var unique_id = $.gritter.add({
-                title: 'This is a sticky notice!',
-                        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="red">magnis dis parturient</a> montes, nascetur ridiculus mus.',
-                        image: 'assets/avatars/avatar.png',
-                        sticky: true,
-                        time: '',
-                        class_name: 'gritter-info' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-                });
-                        return false;
-                });
-                        $('#gritter-without-image').on(ace.click_event, function(){
-                $.gritter.add({
-                // (string | mandatory) the heading of the notification
-                title: 'This is a notice without an image!',
-                        // (string | mandatory) the text inside the notification
-                        text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="orange">magnis dis parturient</a> montes, nascetur ridiculus mus.',
-                        class_name: 'gritter-success' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-                });
-                        return false;
-                });
-                        $('#gritter-max3').on(ace.click_event, function(){
-                $.gritter.add({
-                title: 'This is a notice with a max of 3 on screen at one time!',
-                        text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="green">magnis dis parturient</a> montes, nascetur ridiculus mus.',
-                        image: 'assets/avatars/avatar3.png', //in Ace demo dist will be replaced by correct assets path
-                        sticky: false,
-                        before_open: function(){
-                        if ($('.gritter-item-wrapper').length >= 3)
-                        {
-                        return false;
-                        }
-                        },
-                        class_name: 'gritter-warning' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-                });
-                        return false;
-                });
-                        $('#gritter-center').on(ace.click_event, function(){
-                $.gritter.add({
-                title: 'This is a centered notification',
-                        text: 'Just add a "gritter-center" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
-                        class_name: 'gritter-info gritter-center' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-                });
-                        return false;
-                });
-                        $('#gritter-error').on(ace.click_event, function(){
-                $.gritter.add({
-                title: 'This is a warning notification',
-                        text: 'Just add a "gritter-light" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
-                        class_name: 'gritter-error' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-                });
-                        return false;
-                });
-                        $("#gritter-remove").on(ace.click_event, function(){
-                $.gritter.removeAll();
-                        return false;
-                });
-                        ///////
-
-
-                        $("#bootbox-regular").on(ace.click_event, function() {
-                bootbox.prompt("What is your name?", function(result) {
-                if (result === null) {
-
-                } else {
-
-                }
-                });
-                });
-                        $("#bootbox-confirm").on(ace.click_event, function() {
-                bootbox.confirm("Are you sure?", function(result) {
-                if (result) {
-                //
-                }
-                });
-                });
-                        /**
-                         $("#bootbox-confirm").on(ace.click_event, function() {
-                         bootbox.confirm({
-                         message: "Are you sure?",
-                         buttons: {
-                         confirm: {
-                         label: "OK",
-                         className: "btn-primary btn-sm",
-                         },
-                         cancel: {
-                         label: "Cancel",
-                         className: "btn-sm",
-                         }
-                         },
-                         callback: function(result) {
-                         if(result) alert(1)
-                         }
-                         }
-                         );
-                         });
-                         **/
-
-                        $("#bootbox-options").on(ace.click_event, function() {
-                bootbox.dialog({
-                message: "<span class='bigger-110'>I am a custom dialog with smaller buttons</span>",
-                        buttons:
-                {
-                "success" :
-                {
-                "label" : "<i class='ace-icon fa fa-check'></i> Success!",
-                        "className" : "btn-sm btn-success",
-                        "callback": function() {
-                        //Example.show("great success");
-                        }
-                },
-                        "danger" :
-                {
-                "label" : "Danger!",
-                        "className" : "btn-sm btn-danger",
-                        "callback": function() {
-                        //Example.show("uh oh, look out!");
-                        }
-                },
-                        "click" :
-                {
-                "label" : "Click ME!",
-                        "className" : "btn-sm btn-primary",
-                        "callback": function() {
-                        //Example.show("Primary button");
-                        }
-                },
-                        "button" :
-                {
-                "label" : "Just a button...",
-                        "className" : "btn-sm"
-                }
-                }
-                });
-                });
-            </script>
             </body>
             </html>

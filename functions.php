@@ -2,15 +2,43 @@
 
 function sentar() {
     include "config.php";
-    include "modal.php";
     global $livre;
     if ($livre <= 0) {
-        echo "<script>alert('N\u00e3o existe lugar dispon\u00edvel');location.href='dashboard';</script>";
+        echo "<script type='text/javascript'>
+                $(document).ready(function(){
+                $('#modal-confirmacao').modal('show');
+                });
+          </script>";
+        
+        $cod1="<i class=\"ace-icon fa fa-check green bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">SUCESSO</p></font>";
+	$cod2="<i class=\"ace-icon fa fa-exclamation-triangle orange bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">ALERTA</p></font>";
+	$cod3="<i class=\"ace-icon fa fa-times red bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">ERRO</p></font>";
+        
+        $titulo = "<span class=\"pull-left\">Fila de Espera</span><br>";
+        $tipo = $cod1;
+        $msg = "<h5><span class=\"pull-left\">Não existe lugar disponível.</span></h5><br>";
+        include "modal.php";
+      
     } else {
         $q = " id = '" . $_GET["sentar"] . "'";
         $sql = " UPDATE cash SET espera='Nao', entrada=NOW(), ativo='1' where $q";
         $qry = mysqli_query($conn, $sql);
-        echo "<script>alert('Jogador direcionado \u00e0 mesa');location.href='dashboard';</script>";
+        
+        echo "<script type='text/javascript'>
+                $(document).ready(function(){
+                $('#modal-confirmacao').modal('show');
+                });
+          </script>";
+        
+        $cod1="<i class=\"ace-icon fa fa-check green bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">SUCESSO</p></font>";
+	$cod2="<i class=\"ace-icon fa fa-exclamation-triangle orange bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">ALERTA</p></font>";
+	$cod3="<i class=\"ace-icon fa fa-times red bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">ERRO</p></font>";
+        
+        $titulo = "<span class=\"pull-left\">Fila de Espera</span><br>";
+        $tipo = $cod1;
+        $msg = "<h5><span class=\"pull-left\">Jogador direcionado à mesa.</span></h5><br>";
+        include "modal.php";
+        //echo "<script>alert('Jogador direcionado \u00e0 mesa');location.href='dashboard';</script>";
         unset($q);
     }
 }
@@ -22,34 +50,45 @@ function desistir() {
     //echo "UPDATE cash SET espera='Desistiu', saida=NOW(), ativo='0' where $q";
     //die;
     $qry = mysqli_query($conn, $sql);
-    echo "<script type='text/javascript'>
+     echo "<script type='text/javascript'>
                 $(document).ready(function(){
                 $('#modal-confirmacao').modal('show');
                 });
           </script>";
-
-    $titulo = "Fila de Espera";
-    $tipo = $cod2;
-    $msg = "<h5>Jogador Desistiu</h5>";
-    
-       $cod1="<i class=\"ace-icon fa fa-check green bigger-150 \"></i> &nbsp;<font size=\"5\">SUCESSO</font>";
-	$cod2="<i class=\"ace-icon fa fa-exclamation-triangle orange bigger-150 \"></i> &nbsp;<font size=\"5\">ALERTA</font>";
-	$cod3="<i class=\"ace-icon fa fa-times red bigger-150 \"></i> &nbsp;<font size=\"5\">ERRO</font>";
-    include "modal.php";
+        
+        $cod1="<i class=\"ace-icon fa fa-check green bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">SUCESSO</p></font>";
+	$cod2="<i class=\"ace-icon fa fa-exclamation-triangle orange bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">ALERTA</p></font>";
+	$cod3="<i class=\"ace-icon fa fa-times red bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">ERRO</p></font>";
+        
+        $titulo = "<span class=\"pull-left\">Fila de Espera</span><br>";
+        $tipo = $cod1;
+        $msg = "<h5><span class=\"pull-left\">Jogador desistiu.</span></h5><br>";
+        include "modal.php";
      
     unset($q);
 }
 
 function sair() {
     include "config.php";
-    include "modal.php";
-
-
-
+    
     $q = " id = '" . $_GET["sair"] . "'";
     $sql = " UPDATE cash SET saida=NOW(), ativo='0' where $q ";
     $qry = mysqli_query($conn, $sql);
-    echo "<script>alert('Jogador saiu da mesa');location.href='dashboard';</script>";
+     echo "<script type='text/javascript'>
+                $(document).ready(function(){
+                $('#modal-confirmacao').modal('show');
+                });
+          </script>";
+        
+        $cod1="<i class=\"ace-icon fa fa-check green bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">SUCESSO</p></font>";
+	$cod2="<i class=\"ace-icon fa fa-exclamation-triangle orange bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">ALERTA</p></font>";
+	$cod3="<i class=\"ace-icon fa fa-times red bigger-150 \"></i> &nbsp;<p align=\"left\"><font size=\"5\">ERRO</p></font>";
+        
+        $titulo = "<span class=\"pull-left\">Controle de Jogadores</span><br>";
+        $tipo = $cod1;
+        $msg = "<h5><span class=\"pull-left\">Jogador saiu da mesa.</span></h5><br>";
+        include "modal.php";
+    //echo "<script>alert('Jogador saiu da mesa');location.href='dashboard';</script>";
     unset($q);
 }
 
@@ -90,6 +129,18 @@ function mask($val, $mask) {
     }
     return $maskared;
 }
+
+/*function mask($str,$mask){
+
+    $str = str_replace(" ","",$str);
+
+    for($i=0;$i<strlen($str);$i++){
+        $mask[strpos($mask,"#")] = $str[$i];
+    }
+
+    return $mask;
+
+}*/
 
 /// Formatar Moeda
 

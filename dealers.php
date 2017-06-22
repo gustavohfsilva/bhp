@@ -1,5 +1,6 @@
 <?php
-$page = "Lista";
+$sec = "Controle";
+$page = "Dealers";
 include "head.php";
 include "topo.php";
 include "config.php";
@@ -39,21 +40,10 @@ if (isset($row))
                     <i class="ace-icon fa fa-home home-icon"></i>
                     <a href="#">Home</a>
                 </li>
-                <li>Listagem</li>
+                
                 <li class="active">
-
-                    <?php
-                    if (isset($_GET["jogadores"])) {
-                        echo "Jogadores";
-                    } elseif (isset($_GET["id"]) == "$cx_id") {
-                        echo '<a href="lista?filter=Desistiu">Desist&ecirc;ncias geral</a>';
-                    } else {
-                        echo '<a href="lista?id=' . $cx_id . '">Desist&ecirc;ncias hoje</a>';
-                    }
-                    ?>
-
-
-
+                <?php echo "$sec"; ?>
+                 
                 </li>
             </ul><!-- /.breadcrumb -->
 
@@ -72,18 +62,10 @@ if (isset($row))
 
             <div class="page-header">
                 <h1>
-                    Cash
+                    <?php echo "$sec"; ?>
                     <small>
                         <i class="ace-icon fa fa-angle-double-right"></i>
-                        <?php
-                        if (isset($_GET["jogadores"])) {
-                            echo "Jogadores";
-                        } elseif (isset($_GET["id"]) == "$cx_id") {
-                            echo "Desist&ecirc;ncias Hoje";
-                        } else {
-                            echo "Desist&ecirc;ncias Geral";
-                        }
-                        ?>
+                        <?php echo "$page"; ?>
                     </small>
                 </h1>
             </div><!-- /.page-header -->
