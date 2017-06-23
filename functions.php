@@ -114,6 +114,15 @@ function pagar() {
 		  </script>";
 }
 
+function fidelidade() {
+
+    echo "<script type='text/javascript'>
+			$(document).ready(function(){
+			$('#modal-table').modal('show');
+			});
+		  </script>";
+}
+
 //Formatar CNPJ
 function mask($val, $mask) {
     $maskared = '';

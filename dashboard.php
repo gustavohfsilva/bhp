@@ -821,8 +821,8 @@ while ($ar = mysqli_fetch_array($qry)) {
    $consulta_ac[]="{\"$a_nome \",}";
     }
 
-$listagem_ac = implode(", ",$contula_ac);
-echo $listagem_ac;
+//$listagem_ac = implode(", ",$contula_ac);
+
     
 ?>
                                                 
@@ -1311,7 +1311,7 @@ echo $listagem_ac;
                                                                                 <div class="well">
                                                                                     <h5><span class="grey bolder"><?php echo $nome ?></span></h5>
                                                                                     <p><span class="orange smaller lighter bolder">Valor movimentado</span></p>
-                                                                                    &nbsp;&nbsp;&nbsp;<i class="ace fa fa-angle-double-right "></i> R$ <b><?php echo $valor ?></b><br>
+                                                                                    &nbsp;&nbsp;&nbsp;<i class="ace fa fa-angle-double-right "></i> R$ <b><?php $valor = number_format($valor, 2, ',', '.'); echo $valor ?></b><br>
                                                                                     &nbsp;&nbsp;&nbsp;<i class="ace fa fa-angle-double-right "></i> Pagamento: 
                                                                                     <?php
                                                                                     if ($fpg == Dinheiro or Cartao or Voucher or Cortesia or Cheque or Transf) {

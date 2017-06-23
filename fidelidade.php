@@ -19,7 +19,7 @@ if (isset($row))
 <div class="main-container" id="main-container">
     <script type="text/javascript">
         try {
-        ace.settings.check('main-container', 'fixed');
+            ace.settings.check('main-container', 'fixed');
         } catch (e) {
         }
     </script>
@@ -31,7 +31,7 @@ if (isset($row))
             <div class="breadcrumbs" id="breadcrumbs">
                 <script type="text/javascript">
                     try {
-                    ace.settings.check('breadcrumbs', 'fixed');
+                        ace.settings.check('breadcrumbs', 'fixed');
                     } catch (e) {
                     }
                 </script>
@@ -46,7 +46,7 @@ if (isset($row))
                     </li>
                 </ul><!-- /.breadcrumb -->
 
-                
+
             </div>
 
             <div class="page-content">
@@ -88,7 +88,7 @@ if (isset($row))
                                                     <i class="ace-icon fa fa-user red bigger-110 hidden-480"></i>
                                                     Nome
                                                 </th>
-                                                
+
 
                                                 <th  class="hidden-480">
                                                     <i class="ace-icon fa fa-address-card red bigger-110 hidden-480"></i> 
@@ -163,27 +163,25 @@ if (isset($row))
                                                 $cidade = $ar["cd_cidade"];
                                                 $email = $ar["cd_email"];
                                                 $fixo = $ar["cd_tel_fixo"];
-                                                
+
                                                 $cel = $ar["cd_tel_cel"];
-                                                
+
                                                 $tipo = $ar["cd_tipo"];
                                                 $limite = number_format($limite, 2, ',', '.');
-                                                
+
                                                 //// Validando Telefone
-                                                if (empty($fixo) ) {
-                                                    $fixo="";
+                                                if (empty($fixo)) {
+                                                    $fixo = "";
                                                 } else {
                                                     $fixo = mask($fixo, '(##) ####-#### - ');
                                                 }
-                                                
-                                                 if (empty($cel) ) {
-                                                    $cel="";
+
+                                                if (empty($cel)) {
+                                                    $cel = "";
                                                 } else {
                                                     $cel = mask($cel, '(##) #####-####');
                                                 }
-                                                
 
-                                                
                                                 //// Calculando Espera
                                                 //$data1 = new DateTime($data);
                                                 $data2 = new DateTime($dt_now);
@@ -207,26 +205,166 @@ if (isset($row))
                                                 // $func = $data2->diff($data1);
                                                 $func1 = $data3->diff($data2);
                                                 ?>
-                                            
-                                            <tr>
-                                                <td nowrap><?php echo $nome ?></td>
-                                                <td nowrap><?php echo $cpf ?></td>
-                                                <td nowrap><?php echo "$ssp $rg" ?></td>
-                                                <td ><?php echo "$end - $bairro - $cidade"; ?></td>
-                                                <td nowrap><a href="https://www.google.com.br/maps/search/<?php echo $end?>" target="_blank"><?php echo $cep ?></a></td>
-                                                <td nowrap>R$ <?php echo $limite ?></td>
-                                                <td ><?php echo "$fixo $cel"; ?></td>
-                                                <td nowrap><?php echo $email ?></td>
-                                                <td nowrap><?php echo "{$func1->y} anos"; ?></td>
+
+                                                <tr>
+                                                    <td nowrap><a href="fidelidade?fidelidade=<?php echo $id?>"><?php echo $nome ?></a></td>
+                                                    <td nowrap><?php echo $cpf ?></td>
+                                                    <td nowrap><?php echo "$rg" ?></td>
+                                                    <td ><?php echo "$end - $bairro - $cidade"; ?></td>
+                                                    <td nowrap><a href="https://www.google.com.br/maps/search/<?php echo $end ?>" target="_blank"><?php echo $cep ?></a></td>
+                                                    <td nowrap>R$ <?php echo $limite ?></td>
+                                                    <td ><?php echo "$fixo $cel"; ?></td>
+                                                    <td nowrap><?php echo $email ?></td>
+                                                    <td nowrap><?php echo "{$func1->y} anos"; ?></td>
 
 
-                                            </tr>
-                                            <?php
-                                        }
-                                        ?>
+                                                </tr>
+                                                <?php
+                                            }
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>
+                                <?php
+                                if (isset($_GET["fidelidade"])) {
+                                        
+                                        fidelidade();
+                                }
+                                ?>
+                                <div id="modal-table" class="modal fade" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header no-padding">
+                                                <div class="table-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                        <span class="white">&times;</span>
+                                                    </button>
+                                                    Extrado de movimenta&ccedil;&atilde;o
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-body no-padding">
+                                                <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><?php global $f_nome; echo $f_nome ?></th>
+                                                    </tr>
+                                                </table>
+                                                <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                <i class="ace-icon fa fa-money green bigger-110"></i>
+                                                                Valor
+                                                            </th>
+                                                            
+                                                            <th>
+                                                                <i class="ace-icon fa fa-arrow-up green  bigger-110"></i>
+                                                                Tipo
+                                                                 <i class="ace-icon fa fa-arrow-down red bigger-110"></i>
+                                                            </th>
+                                                            
+                                                            <th>
+                                                                <i class="ace-icon fa fa-calendar bigger-110"></i>
+                                                                Data
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+<?php 
+        if (isset($_GET["fidelidade"])) {
+            $q = "AND cd_id ='" . $_GET["fidelidade"] . "'";
+        }
+
+$sql = "SELECT cd_id, cd_nome, cmp_valor as entrada, cmp_data as data, null as pgt_valor, null as pgt_data FROM cadastro_pessoa cd
+LEFT JOIN cash_entrada ce on ce.cmp_id_jogador = cd_id
+LEFT JOIN cash_saida cs on cs.pgt_id_jogador = cd_id
+WHERE cd_tipo='Fidelidade' $q AND ce.cmp_f_pg='4'
+UNION 
+SELECT cd_id, cd_nome, null as cmp_valor, null as cmp_data, pgt_valor as saida, pgt_data as data FROM cadastro_pessoa cd
+LEFT JOIN cash_entrada ce on ce.cmp_id_jogador = cd_id
+LEFT JOIN cash_saida cs on cs.pgt_id_jogador = cd_id
+WHERE cd_tipo='Fidelidade' $q AND cs.pgt_f_pg='4'";
+    $qry = mysqli_query($conn, $sql);
+
+    while ($ar = mysqli_fetch_array($qry)) {
+            $f_id = $ar["cd_id"];
+            $f_nome = $ar["cd_nome"];
+            $f_entrada = $ar["entrada"];
+            $f_datae = $ar["data"];
+            $f_saida   = $ar["pgt_valor"];
+            $f_datas = $ar["pgt_data"];
+            $total = ($f_entrada - $f_saida);
+            
+            
+        ?>
+                                                        <tr>
+                                                            <td>
+                                                                <?php 
+                                                                    if (empty($f_entrada)) {
+                                                                        $f_saida = number_format($f_saida, 2, ',', '.');
+                                                                        echo "R$ $f_saida";
+                                                                    }
+                                                                    elseif(empty($f_saida)) {
+                                                                        $f_entrada = number_format($f_entrada, 2, ',', '.');
+                                                                        echo "R$ $f_entrada";
+                                                                    }
+                                                                ?>
+                                                            </td>
+                                                            <td><?php 
+                                                                    if (empty($f_datae)) {
+                                                                        echo " <i class=\"ace-icon fa fa-arrow-down red bigger-110\"></i> &nbsp;";
+                                                                        echo "<span class=\"label label-danger\"> SA&Iacute;DA</span>";
+                                                                    }
+                                                                    elseif(empty($f_datas)) {
+                                                                        echo "<i class=\"ace-icon fa fa-arrow-up green  bigger-110\"></i> &nbsp;";
+                                                                         echo "<span class=\"label label-success \"> ENTRADA</span>";
+                                                                    }
+                                                                ?></td>
+                                                            <td>
+                                                            <?php 
+                                                                    if (empty($f_datae)) {
+                                                                        
+                                                                        echo "$f_datas";
+                                                                    }
+                                                                    elseif(empty($f_datas)) {
+                                                                        
+                                                                        echo "$f_datae";
+                                                                    }
+                                                                ?>
+                                                            </td>
+                                                           
+                                                        </tr>
+
+                                                    </tbody>
+                                                
+                                                    <?php } ?>                                                       
+                                                    
+                                                    <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Total</td>
+                                                        
+                                                            <td><?php?></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                </table>   
+
+                                            </div>
+                                     
+
+                                            <div class="modal-footer no-margin-top">
+                                                <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
+                                                    <i class="ace-icon fa fa-times"></i>
+                                                    Close
+                                                </button>
+
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- PAGE CONTENT ENDS -->
                             </div>
                         </div>
                     </div><!-- /.col -->
@@ -278,7 +416,7 @@ if (isset($row))
 
     <!--[if !IE]> -->
     <script type="text/javascript">
-                                            window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
+                    window.jQuery || document.write("<script src='../assets/js/jquery.min.js'>" + "<" + "/script>");
     </script>
 
     <!-- <![endif]-->
@@ -290,11 +428,15 @@ if (isset($row))
     <![endif]-->
     <script type="text/javascript">
         if ('ontouchstart' in document.documentElement)
-                document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+            document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
     </script>
     <script src="../assets/js/bootstrap.min.js"></script>
 
     <!-- page specific plugin scripts -->
+    <script src="../assets/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/js/jquery.dataTables.bootstrap.min.js"></script>
+    <script src="../assets/js/dataTables.tableTools.min.js"></script>
+    <script src="../assets/js/dataTables.colVis.min.js"></script>
     <script src="../assets/js/jquery.dataTables.min.js"></script>
     <script src="../assets/js/jquery.dataTables.bootstrap.min.js"></script>
     <script src="../assets/js/dataTables.tableTools.min.js"></script>
@@ -305,18 +447,19 @@ if (isset($row))
     <script src="../assets/js/ace.min.js"></script>
 
     <!-- inline scripts related to this page -->
+
     <script type="text/javascript">
         jQuery(function ($) {
-        //initiate dataTables plugin
-        var oTable1 =
-                $('#dynamic-table')
-                //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
-                .dataTable({
-                bAutoWidth: false,
+            //initiate dataTables plugin
+            var oTable1 =
+                    $('#dynamic-table')
+                    //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+                    .dataTable({
+                        bAutoWidth: false,
                         "aoColumns": [
-                        {"bSortable": true},
-                                null, null, null,null, null, null,
-                        {"bSortable": true}
+                            {"bSortable": true},
+                            null, null, null, null, null, null, null,
+                            {"bSortable": true}
                         ],
                         "aaSorting": [],
                         //,
@@ -330,65 +473,65 @@ if (isset($row))
                         //you may want to wrap the table inside a "div.dataTables_borderWrap" element
 
                         //"iDisplayLength": 50
-                });
-        //oTable1.fnAdjustColumnSizing();
+                    });
+            //oTable1.fnAdjustColumnSizing();
 
 
-        //TableTools settings
-        TableTools.classes.container = "btn-group btn-overlap";
-        TableTools.classes.print = {
-        "body": "DTTT_Print",
+            //TableTools settings
+            TableTools.classes.container = "btn-group btn-overlap";
+            TableTools.classes.print = {
+                "body": "DTTT_Print",
                 "info": "tableTools-alert gritter-item-wrapper gritter-info gritter-center white",
                 "message": "tableTools-print-navbar"
-        }
+            }
 
-        //initiate TableTools extension
-        var tableTools_obj = new $.fn.dataTable.TableTools(oTable1, {
-        "sSwfPath": "../assets/swf/copy_csv_xls_pdf.swf",
+            //initiate TableTools extension
+            var tableTools_obj = new $.fn.dataTable.TableTools(oTable1, {
+                "sSwfPath": "../assets/swf/copy_csv_xls_pdf.swf",
                 "sRowSelector": "td:not(:last-child)",
                 "sRowSelect": "multi",
                 "fnRowSelected": function (row) {
-                //check checkbox when row is selected
-                try {
-                $(row).find('input[type=checkbox]').get(0).checked = true
-                } catch (e) {
-                }
+                    //check checkbox when row is selected
+                    try {
+                        $(row).find('input[type=checkbox]').get(0).checked = true
+                    } catch (e) {
+                    }
                 },
                 "fnRowDeselected": function (row) {
-                //uncheck checkbox
-                try {
-                $(row).find('input[type=checkbox]').get(0).checked = false
-                } catch (e) {
-                }
+                    //uncheck checkbox
+                    try {
+                        $(row).find('input[type=checkbox]').get(0).checked = false
+                    } catch (e) {
+                    }
                 },
                 "sSelectedClass": "success",
                 "aButtons": [
-                {
-                "sExtends": "copy",
+                    {
+                        "sExtends": "copy",
                         "sToolTip": "Copy to clipboard",
                         "sButtonClass": "btn btn-white btn-primary btn-bold",
                         "sButtonText": "<i class='fa fa-copy bigger-110 pink'></i>",
                         "fnComplete": function () {
-                        this.fnInfo('<h3 class="no-margin-top smaller">Table copied</h3>\
+                            this.fnInfo('<h3 class="no-margin-top smaller">Table copied</h3>\
                                                             <p>Copied ' + (oTable1.fnSettings().fnRecordsTotal()) + ' row(s) to the clipboard.</p>',
-                                1500
-                                );
+                                    1500
+                                    );
                         }
-                },
-                {
-                "sExtends": "csv",
+                    },
+                    {
+                        "sExtends": "csv",
                         "sToolTip": "Export to CSV",
                         "sButtonClass": "btn btn-white btn-primary  btn-bold",
                         "sButtonText": "<i class='fa fa-file-excel-o bigger-110 green'></i>"
-                },
-                {
-                "sExtends": "pdf",
+                    },
+                    {
+                        "sExtends": "pdf",
                         "sToolTip": "Export to PDF",
                         "sButtonClass": "btn btn-white btn-primary  btn-bold",
                         "sButtonText": "<i class='fa fa-file-pdf-o bigger-110 red'></i>"
-                },
-                {
-                "sExtends": "print",
+                    },
+                    {
+                        "sExtends": "print",
                         "sToolTip": "Print view",
                         "sButtonClass": "btn btn-white btn-primary  btn-bold",
                         "sButtonText": "<i class='fa fa-print bigger-110 grey'></i>",
@@ -397,116 +540,117 @@ if (isset($row))
                                                               <p>Please use your browser's print function to\
                                                               print this table.\
                                                               <br />Press <b>escape</b> when finished.</p>",
-                }
+                    }
                 ]
-        });
-        //we put a container before our table and append TableTools element to it
-        $(tableTools_obj.fnContainer()).appendTo($('.tableTools-container'));
-        //also add tooltips to table tools buttons
-        //addding tooltips directly to "A" buttons results in buttons disappearing (weired! don't know why!)
-        //so we add tooltips to the "DIV" child after it becomes inserted
-        //flash objects inside table tools buttons are inserted with some delay (100ms) (for some reason)
-        setTimeout(function () {
-        $(tableTools_obj.fnContainer()).find('a.DTTT_button').each(function () {
-        var div = $(this).find('> div');
-        if (div.length > 0)
-                div.tooltip({container: 'body'});
-        else
-                $(this).tooltip({container: 'body'});
-        });
-        }, 200);
-        //ColVis extension
-        var colvis = new $.fn.dataTable.ColVis(oTable1, {
-        "buttonText": "<i class='fa fa-search'></i>",
+            });
+            //we put a container before our table and append TableTools element to it
+            $(tableTools_obj.fnContainer()).appendTo($('.tableTools-container'));
+            //also add tooltips to table tools buttons
+            //addding tooltips directly to "A" buttons results in buttons disappearing (weired! don't know why!)
+            //so we add tooltips to the "DIV" child after it becomes inserted
+            //flash objects inside table tools buttons are inserted with some delay (100ms) (for some reason)
+            setTimeout(function () {
+                $(tableTools_obj.fnContainer()).find('a.DTTT_button').each(function () {
+                    var div = $(this).find('> div');
+                    if (div.length > 0)
+                        div.tooltip({container: 'body'});
+                    else
+                        $(this).tooltip({container: 'body'});
+                });
+            }, 200);
+            //ColVis extension
+            var colvis = new $.fn.dataTable.ColVis(oTable1, {
+                "buttonText": "<i class='fa fa-search'></i>",
                 "aiExclude": [0, 6],
                 "bShowAll": true,
                 //"bRestore": true,
                 "sAlign": "right",
                 "fnLabel": function (i, title, th) {
-                return $(th).text(); //remove icons, etc
+                    return $(th).text(); //remove icons, etc
                 }
 
-        });
-        //style it
-        $(colvis.button()).addClass('btn-group').find('button').addClass('btn btn-white btn-info btn-bold')
+            });
+            //style it
+            $(colvis.button()).addClass('btn-group').find('button').addClass('btn btn-white btn-info btn-bold')
 
-                //and append it to our table tools btn-group, also add tooltip
-                $(colvis.button())
-                .prependTo('.tableTools-container .btn-group')
-                .attr('title', 'Show/hide columns').tooltip({container: 'body'});
-        //and make the list, buttons and checkboxed Ace-like
-        $(colvis.dom.collection)
-                .addClass('dropdown-menu dropdown-light dropdown-caret dropdown-caret-right')
-                .find('li').wrapInner('<a href="javascript:void(0)" />') //'A' tag is required for better styling
-                .find('input[type=checkbox]').addClass('ace').next().addClass('lbl padding-8');
-        /////////////////////////////////
-        //table checkboxes
-        $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
-        //select/deselect all rows according to table header checkbox
-        $('#dynamic-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
-        var th_checked = this.checked; //checkbox inside "TH" table header
+            //and append it to our table tools btn-group, also add tooltip
+            $(colvis.button())
+                    .prependTo('.tableTools-container .btn-group')
+                    .attr('title', 'Show/hide columns').tooltip({container: 'body'});
+            //and make the list, buttons and checkboxed Ace-like
+            $(colvis.dom.collection)
+                    .addClass('dropdown-menu dropdown-light dropdown-caret dropdown-caret-right')
+                    .find('li').wrapInner('<a href="javascript:void(0)" />') //'A' tag is required for better styling
+                    .find('input[type=checkbox]').addClass('ace').next().addClass('lbl padding-8');
+            /////////////////////////////////
+            //table checkboxes
+            $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+            //select/deselect all rows according to table header checkbox
+            $('#dynamic-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
+                var th_checked = this.checked; //checkbox inside "TH" table header
 
-        $(this).closest('table').find('tbody > tr').each(function () {
-        var row = this;
-        if (th_checked)
-                tableTools_obj.fnSelect(row);
-        else
-                tableTools_obj.fnDeselect(row);
-        });
-        });
-        //select/deselect a row when the checkbox is checked/unchecked
-        $('#dynamic-table').on('click', 'td input[type=checkbox]', function () {
-        var row = $(this).closest('tr').get(0);
-        if (!this.checked)
-                tableTools_obj.fnSelect(row);
-        else
-                tableTools_obj.fnDeselect($(this).closest('tr').get(0));
-        });
-        $(document).on('click', '#dynamic-table .dropdown-toggle', function (e) {
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-        e.preventDefault();
-        });
-        //And for the first simple table, which doesn't have TableTools or dataTables
-        //select/deselect all rows according to table header checkbox
-        var active_class = 'active';
-        $('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
-        var th_checked = this.checked; //checkbox inside "TH" table header
+                $(this).closest('table').find('tbody > tr').each(function () {
+                    var row = this;
+                    if (th_checked)
+                        tableTools_obj.fnSelect(row);
+                    else
+                        tableTools_obj.fnDeselect(row);
+                });
+            });
+            //select/deselect a row when the checkbox is checked/unchecked
+            $('#dynamic-table').on('click', 'td input[type=checkbox]', function () {
+                var row = $(this).closest('tr').get(0);
+                if (!this.checked)
+                    tableTools_obj.fnSelect(row);
+                else
+                    tableTools_obj.fnDeselect($(this).closest('tr').get(0));
+            });
+            $(document).on('click', '#dynamic-table .dropdown-toggle', function (e) {
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+            //And for the first simple table, which doesn't have TableTools or dataTables
+            //select/deselect all rows according to table header checkbox
+            var active_class = 'active';
+            $('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
+                var th_checked = this.checked; //checkbox inside "TH" table header
 
-        $(this).closest('table').find('tbody > tr').each(function () {
-        var row = this;
-        if (th_checked)
-                $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-        else
-                $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-        });
-        });
-        //select/deselect a row when the checkbox is checked/unchecked
-        $('#simple-table').on('click', 'td input[type=checkbox]', function () {
-        var $row = $(this).closest('tr');
-        if (this.checked)
-                $row.addClass(active_class);
-        else
-                $row.removeClass(active_class);
-        });
-        /********************************/
-        //add tooltip for small view action buttons in dropdown menu
-        $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-        //tooltip placement on right or left
-        function tooltip_placement(context, source) {
-        var $source = $(source);
-        var $parent = $source.closest('table')
+                $(this).closest('table').find('tbody > tr').each(function () {
+                    var row = this;
+                    if (th_checked)
+                        $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+                    else
+                        $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+                });
+            });
+            //select/deselect a row when the checkbox is checked/unchecked
+            $('#simple-table').on('click', 'td input[type=checkbox]', function () {
+                var $row = $(this).closest('tr');
+                if (this.checked)
+                    $row.addClass(active_class);
+                else
+                    $row.removeClass(active_class);
+            });
+            /********************************/
+            //add tooltip for small view action buttons in dropdown menu
+            $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+            //tooltip placement on right or left
+            function tooltip_placement(context, source) {
+                var $source = $(source);
+                var $parent = $source.closest('table')
                 var off1 = $parent.offset();
-        var w1 = $parent.width();
-        var off2 = $source.offset();
-        //var w2 = $source.width();
+                var w1 = $parent.width();
+                var off2 = $source.offset();
+                //var w2 = $source.width();
 
-        if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
-                return 'right';
-        return 'left';
-        }
+                if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
+                    return 'right';
+                return 'left';
+            }
 
         })
     </script>
+
 </body>
 </html>
