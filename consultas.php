@@ -35,6 +35,7 @@ if (isset($row))
     extract($row);
 
 
+
 /////////// Soma de Valores
 //////// Entrada
 
@@ -285,6 +286,65 @@ if (isset($_POST['cx_fechamento'])) {
         }
     }
 }
+
+/////// Jackpot
+
+if (isset($_POST['jackpot'])) {
+
+        $jackpot = $_POST['jck_valor'];
+        $op_jck = $_POST['op_jackpot'];
+        
+        if ($op_jck === novo) {
+            $sql = "UPDATE cash_jackpot set jck_data_fim=NOW(), jck_ativo='0' where jck_ativo='1'";
+            mysqli_query($conn, $sql);
+            
+            $sql = "INSERT INTO cash_jackpot set jck_valor='$jackpot', jck_data_inicio=NOW(), jck_ativo='1'";
+            mysqli_query($conn, $sql);
+            
+        echo "<script type='text/javascript'>
+                    $(document).ready(function(){
+                    $('#modal-confirmacao').modal('show');
+                    });
+              </script>";
+            $titulo = "Jackpot";
+            $tipo = $cod1;
+            $msg = "<h5>Novo jackpot cadastrado com sucesso.</h5>";
+            unset($jackpot);
+            unset($op_jck);
+        
+        } elseif ($op_jck === update) {
+
+        $sql = "UPDATE cash_jackpot set jck_valor='$jackpot' where jck_ativo='1'";
+        mysqli_query($conn, $sql);
+        
+            echo "<script type='text/javascript'>
+                        $(document).ready(function(){
+                        $('#modal-confirmacao').modal('show');
+                        });
+                  </script>";
+            $titulo = "Jackpot";
+            $tipo = $cod2;
+            $msg = "<h5>Valor atualizado com sucesso.</h5>";
+            unset($jackpot);
+            unset($op_jck);
+        
+        } else {
+            $sql = "UPDATE cash_jackpot set jck_ativo='0', jck_data_fim=NOW() where jck_ativo='1'";
+        mysqli_query($conn, $sql);
+        
+            echo "<script type='text/javascript'>
+                        $(document).ready(function(){
+                        $('#modal-confirmacao').modal('show');
+                        });
+                  </script>";
+            $titulo = "Jackpot";
+            $tipo = $cod1;
+            $msg = "<h5>Jackpot encerrado.</h5>";
+            unset($jackpot);
+            unset($op_jck);
+        }
+    }
+
 
 if (isset($_POST['compra'])) {
     

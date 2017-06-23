@@ -809,28 +809,25 @@ include "consultas.php";
                                                     </div>
                                                 </div><!-- /.#member-tab -->
 
-<?php
+                                                <?php
+                                                $sql = "select DISTINCT cd_id, cd_nome from cadastro_pessoa where cd_tipo='Fidelidade'";
+                                                $qry = mysqli_query($conn, $sql);
 
-$sql = "select DISTINCT cd_id, cd_nome from cadastro_pessoa where cd_tipo='Fidelidade'";
-$qry = mysqli_query($conn, $sql);
+                                                while ($ar = mysqli_fetch_array($qry)) {
+                                                    $a_id = $ar['cd_id'];
+                                                    $a_nome = $ar['cd_nome'];
 
-while ($ar = mysqli_fetch_array($qry)) {
-    $a_id = $ar['cd_id'];
-    $a_nome = $ar['cd_nome'];
-    
-   $consulta_ac[]="{\"$a_nome \",}";
-    }
+                                                    $consulta_ac[] = "{\"$a_nome \",}";
+                                                }
 
 //$listagem_ac = implode(", ",$contula_ac);
+                                                ?>
 
-    
-?>
-                                                
                                                 <div class="row">
 
                                                     <!-- Modal Adicionar Jogador -->
-                                                   
-                                                     
+
+
 
                                                     <div id="modal-form" class="modal" tabindex="-1">
                                                         <form method="post">
@@ -1230,6 +1227,72 @@ while ($ar = mysqli_fetch_array($qry)) {
                                                         </form>
                                                     </div>
 
+                                                    <!-- Modal Jackpot-->
+
+                                                    <div id="modal-form-jackpot" class="modal" tabindex="-1">
+                                                        <form method="post">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                        <h4 class="blue bigger bolder">Configurar Jackpot</h4>
+                                                                    </div>
+
+
+                                                                    <div class="modal-body">
+                                                                        <div class="ace-settings-item"> 
+                                                                            <label for="form-field-first">Valor</label>
+                                                                            <div>
+
+                                                                                <div class="input-group">
+                                                                                    <span class="input-group-addon">
+                                                                                        <i class="ace-icon fa fa-money"></i>
+                                                                                    </span>
+
+                                                                                    <input class="input-mask-valor" type="number" name="jck_valor" id="form-field-mask-4" required/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="space-4"></div>
+                                                                        <div>
+                                                                        <label class="" for="form-field-1">Opções</label>
+                                                                            <br>
+                                                                            <label>
+                                                                                <input type="radio" name="op_jackpot" id="espera" value="novo"  class="ace" required="" />
+                                                                                <span class="lbl"> Novo </span>
+                                                                            </label>
+                                                                            &nbsp;
+                                                                            <label>
+                                                                                <input type="radio" name="op_jackpot" id="espera" value="update" class="ace" />
+                                                                                <span class="lbl"> Atualizar	</span>
+
+                                                                            </label>
+                                                                            &nbsp;
+                                                                            <label>
+                                                                                <input type="radio" name="op_jackpot" id="espera" value="encerrar" class="ace" />
+                                                                                <span class="lbl"> Encerrar	</span>
+
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="modal-footer">
+                                                                        <button class="btn btn-sm" data-dismiss="modal">
+                                                                            <i class="ace-icon fa fa-times"></i>
+                                                                            Cancelar
+                                                                        </button>
+
+                                                                        <button name="jackpot" value="jackpot" class="btn btn-sm btn-primary">
+                                                                            <i class="ace-icon fa fa-check"></i>
+                                                                            Salvar
+                                                                        </button>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+
                                                     <!-- Modal Pagamento -->
 
                                                     <div id="modal-form-cashout" class="modal" tabindex="-1">
@@ -1311,7 +1374,9 @@ while ($ar = mysqli_fetch_array($qry)) {
                                                                                 <div class="well">
                                                                                     <h5><span class="grey bolder"><?php echo $nome ?></span></h5>
                                                                                     <p><span class="orange smaller lighter bolder">Valor movimentado</span></p>
-                                                                                    &nbsp;&nbsp;&nbsp;<i class="ace fa fa-angle-double-right "></i> R$ <b><?php $valor = number_format($valor, 2, ',', '.'); echo $valor ?></b><br>
+                                                                                    &nbsp;&nbsp;&nbsp;<i class="ace fa fa-angle-double-right "></i> R$ <b><?php $valor = number_format($valor, 2, ',', '.');
+                                                                                            echo $valor
+                                                                                            ?></b><br>
                                                                                     &nbsp;&nbsp;&nbsp;<i class="ace fa fa-angle-double-right "></i> Pagamento: 
                                                                                     <?php
                                                                                     if ($fpg == Dinheiro or Cartao or Voucher or Cortesia or Cheque or Transf) {
@@ -1449,7 +1514,7 @@ while ($ar = mysqli_fetch_array($qry)) {
               <script src="assets/js/excanvas.min.js"></script>
             <![endif]-->
             <script src="../assets/js/jquery-ui.custom.min.js"></script>
-            
+
             <script src="../assets/js/jquery.easypiechart.min.js"></script>
             <script src="../assets/js/jquery.sparkline.min.js"></script>
             <script src="../assets/js/jquery.flot.min.js"></script>
@@ -1457,7 +1522,7 @@ while ($ar = mysqli_fetch_array($qry)) {
             <script src="../assets/js/jquery.flot.resize.min.js"></script>
 
             <script src="../assets/js/jquery-ui.custom.min.js"></script>
-            
+
             <script src="../assets/js/chosen.jquery.min.js"></script>
             <script src="../assets/js/fuelux.spinner.min.js"></script>
             <script src="../assets/js/bootstrap-datepicker.min.js"></script>
@@ -1478,247 +1543,248 @@ while ($ar = mysqli_fetch_array($qry)) {
 
             <!-- inline scripts related to this page -->
             <script type="text/javascript">
-			jQuery(function($) {
-			
-				$( "#datepicker" ).datepicker({
-					showOtherMonths: true,
-					selectOtherMonths: false,
-					//isRTL:true,
-			
-					
-					/*
-					changeMonth: true,
-					changeYear: true,
-					
-					showButtonPanel: true,
-					beforeShow: function() {
-						//change button colors
-						var datepicker = $(this).datepicker( "widget" );
-						setTimeout(function(){
-							var buttons = datepicker.find('.ui-datepicker-buttonpane')
-							.find('button');
-							buttons.eq(0).addClass('btn btn-xs');
-							buttons.eq(1).addClass('btn btn-xs btn-success');
-							buttons.wrapInner('<span class="bigger-110" />');
-						}, 0);
-					}
-			*/
-				});
-			
-			
-				//override dialog's title function to allow for HTML titles
-				$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
-					_title: function(title) {
-						var $title = this.options.title || '&nbsp;'
-						if( ("title_html" in this.options) && this.options.title_html == true )
-							title.html($title);
-						else title.text($title);
-					}
-				}));
-			
-				$( "#id-btn-dialog1" ).on('click', function(e) {
-					e.preventDefault();
-			
-					var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
-						modal: true,
-						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-check'></i> jQuery UI Dialog</h4></div>",
-						title_html: true,
-						buttons: [ 
-							{
-								text: "Cancel",
-								"class" : "btn btn-minier",
-								click: function() {
-									$( this ).dialog( "close" ); 
-								} 
-							},
-							{
-								text: "OK",
-								"class" : "btn btn-primary btn-minier",
-								click: function() {
-									$( this ).dialog( "close" ); 
-								} 
-							}
-						]
-					});
-			
-					/**
-					dialog.data( "uiDialog" )._title = function(title) {
-						title.html( this.options.title );
-					};
-					**/
-				});
-			
-			
-				$( "#id-btn-dialog2" ).on('click', function(e) {
-					e.preventDefault();
-				
-					$( "#dialog-confirm" ).removeClass('hide').dialog({
-						resizable: false,
-						width: '320',
-						modal: true,
-						title: "<div class='widget-header'><h4 class='smaller'><i class='ace-icon fa fa-exclamation-triangle red'></i> Empty the recycle bin?</h4></div>",
-						title_html: true,
-						buttons: [
-							{
-								html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Delete all items",
-								"class" : "btn btn-danger btn-minier",
-								click: function() {
-									$( this ).dialog( "close" );
-								}
-							}
-							,
-							{
-								html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancel",
-								"class" : "btn btn-minier",
-								click: function() {
-									$( this ).dialog( "close" );
-								}
-							}
-						]
-					});
-				});
-			
-			
-				
-				//autocomplete
-				 var availableTags = [
-					"Gustavo"
-				];
-				$( "#tags" ).autocomplete({
-					source: availableTags
-				});
-			
-				//custom autocomplete (category selection)
-				$.widget( "custom.catcomplete", $.ui.autocomplete, {
-					_create: function() {
-						this._super();
-						this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
-					},
-					_renderMenu: function( ul, items ) {
-						var that = this,
-						currentCategory = "";
-						$.each( items, function( index, item ) {
-							var li;
-							if ( item.category != currentCategory ) {
-								ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-								currentCategory = item.category;
-							}
-							li = that._renderItemData( ul, item );
-								if ( item.category ) {
-								li.attr( "aria-label", item.category + " : " + item.label );
-							}
-						});
-					}
-				});
-				
-				 var data = [
-					{ label: "anders", category: "" },
-					{ label: "andreas", category: "" },
-					{ label: "antal", category: "" },
-					{ label: "annhhx10", category: "Products" },
-					{ label: "annk K12", category: "Products" },
-					{ label: "annttop C13", category: "Products" },
-					{ label: "anders andersson", category: "People" },
-					{ label: "andreas andersson", category: "People" },
-					{ label: "andreas johnson", category: "People" }
-				];
-				$( "#search" ).catcomplete({
-					delay: 0,
-					source: data
-				});
-				
-				
-				//tooltips
-				$( "#show-option" ).tooltip({
-					show: {
-						effect: "slideDown",
-						delay: 250
-					}
-				});
-			
-				$( "#hide-option" ).tooltip({
-					hide: {
-						effect: "explode",
-						delay: 250
-					}
-				});
-			
-				$( "#open-event" ).tooltip({
-					show: null,
-					position: {
-						my: "left top",
-						at: "left bottom"
-					},
-					open: function( event, ui ) {
-						ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast" );
-					}
-				});
-			
-			
-				//Menu
-				$( "#menu" ).menu();
-			
-			
-				//spinner
-				var spinner = $( "#spinner" ).spinner({
-					create: function( event, ui ) {
-						//add custom classes and icons
-						$(this)
-						.next().addClass('btn btn-success').html('<i class="ace-icon fa fa-plus"></i>')
-						.next().addClass('btn btn-danger').html('<i class="ace-icon fa fa-minus"></i>')
-						
-						//larger buttons on touch devices
-						if('touchstart' in document.documentElement) 
-							$(this).closest('.ui-spinner').addClass('ui-spinner-touch');
-					}
-				});
-			
-				//slider example
-				$( "#slider" ).slider({
-					range: true,
-					min: 0,
-					max: 500,
-					values: [ 75, 300 ]
-				});
-			
-			
-			
-				//jquery accordion
-				$( "#accordion" ).accordion({
-					collapsible: true ,
-					heightStyle: "content",
-					animate: 250,
-					header: ".accordion-header"
-				}).sortable({
-					axis: "y",
-					handle: ".accordion-header",
-					stop: function( event, ui ) {
-						// IE doesn't register the blur when sorting
-						// so trigger focusout handlers to remove .ui-state-focus
-						ui.item.children( ".accordion-header" ).triggerHandler( "focusout" );
-					}
-				});
-				//jquery tabs
-				$( "#tabs" ).tabs();
-				
-				
-				//progressbar
-				$( "#progressbar" ).progressbar({
-					value: 37,
-					create: function( event, ui ) {
-						$(this).addClass('progress progress-striped active')
-							   .children(0).addClass('progress-bar progress-bar-success');
-					}
-				});
-			
-				
-				//selectmenu
-				 $( "#number" ).css('width', '200px')
-				.selectmenu({ position: { my : "left bottom", at: "left top" } })
-					
-			});
-		</script>
-            
+                jQuery(function ($) {
+
+                    $("#datepicker").datepicker({
+                        showOtherMonths: true,
+                        selectOtherMonths: false,
+                        //isRTL:true,
+
+
+                        /*
+                         changeMonth: true,
+                         changeYear: true,
+                         
+                         showButtonPanel: true,
+                         beforeShow: function() {
+                         //change button colors
+                         var datepicker = $(this).datepicker( "widget" );
+                         setTimeout(function(){
+                         var buttons = datepicker.find('.ui-datepicker-buttonpane')
+                         .find('button');
+                         buttons.eq(0).addClass('btn btn-xs');
+                         buttons.eq(1).addClass('btn btn-xs btn-success');
+                         buttons.wrapInner('<span class="bigger-110" />');
+                         }, 0);
+                         }
+                         */
+                    });
+
+
+                    //override dialog's title function to allow for HTML titles
+                    $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+                        _title: function (title) {
+                            var $title = this.options.title || '&nbsp;'
+                            if (("title_html" in this.options) && this.options.title_html == true)
+                                title.html($title);
+                            else
+                                title.text($title);
+                        }
+                    }));
+
+                    $("#id-btn-dialog1").on('click', function (e) {
+                        e.preventDefault();
+
+                        var dialog = $("#dialog-message").removeClass('hide').dialog({
+                            modal: true,
+                            title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-check'></i> jQuery UI Dialog</h4></div>",
+                            title_html: true,
+                            buttons: [
+                                {
+                                    text: "Cancel",
+                                    "class": "btn btn-minier",
+                                    click: function () {
+                                        $(this).dialog("close");
+                                    }
+                                },
+                                {
+                                    text: "OK",
+                                    "class": "btn btn-primary btn-minier",
+                                    click: function () {
+                                        $(this).dialog("close");
+                                    }
+                                }
+                            ]
+                        });
+
+                        /**
+                         dialog.data( "uiDialog" )._title = function(title) {
+                         title.html( this.options.title );
+                         };
+                         **/
+                    });
+
+
+                    $("#id-btn-dialog2").on('click', function (e) {
+                        e.preventDefault();
+
+                        $("#dialog-confirm").removeClass('hide').dialog({
+                            resizable: false,
+                            width: '320',
+                            modal: true,
+                            title: "<div class='widget-header'><h4 class='smaller'><i class='ace-icon fa fa-exclamation-triangle red'></i> Empty the recycle bin?</h4></div>",
+                            title_html: true,
+                            buttons: [
+                                {
+                                    html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Delete all items",
+                                    "class": "btn btn-danger btn-minier",
+                                    click: function () {
+                                        $(this).dialog("close");
+                                    }
+                                }
+                                ,
+                                {
+                                    html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancel",
+                                    "class": "btn btn-minier",
+                                    click: function () {
+                                        $(this).dialog("close");
+                                    }
+                                }
+                            ]
+                        });
+                    });
+
+
+
+                    //autocomplete
+                    var availableTags = [
+                        "Gustavo"
+                    ];
+                    $("#tags").autocomplete({
+                        source: availableTags
+                    });
+
+                    //custom autocomplete (category selection)
+                    $.widget("custom.catcomplete", $.ui.autocomplete, {
+                        _create: function () {
+                            this._super();
+                            this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                        },
+                        _renderMenu: function (ul, items) {
+                            var that = this,
+                                    currentCategory = "";
+                            $.each(items, function (index, item) {
+                                var li;
+                                if (item.category != currentCategory) {
+                                    ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
+                                    currentCategory = item.category;
+                                }
+                                li = that._renderItemData(ul, item);
+                                if (item.category) {
+                                    li.attr("aria-label", item.category + " : " + item.label);
+                                }
+                            });
+                        }
+                    });
+
+                    var data = [
+                        {label: "anders", category: ""},
+                        {label: "andreas", category: ""},
+                        {label: "antal", category: ""},
+                        {label: "annhhx10", category: "Products"},
+                        {label: "annk K12", category: "Products"},
+                        {label: "annttop C13", category: "Products"},
+                        {label: "anders andersson", category: "People"},
+                        {label: "andreas andersson", category: "People"},
+                        {label: "andreas johnson", category: "People"}
+                    ];
+                    $("#search").catcomplete({
+                        delay: 0,
+                        source: data
+                    });
+
+
+                    //tooltips
+                    $("#show-option").tooltip({
+                        show: {
+                            effect: "slideDown",
+                            delay: 250
+                        }
+                    });
+
+                    $("#hide-option").tooltip({
+                        hide: {
+                            effect: "explode",
+                            delay: 250
+                        }
+                    });
+
+                    $("#open-event").tooltip({
+                        show: null,
+                        position: {
+                            my: "left top",
+                            at: "left bottom"
+                        },
+                        open: function (event, ui) {
+                            ui.tooltip.animate({top: ui.tooltip.position().top + 10}, "fast");
+                        }
+                    });
+
+
+                    //Menu
+                    $("#menu").menu();
+
+
+                    //spinner
+                    var spinner = $("#spinner").spinner({
+                        create: function (event, ui) {
+                            //add custom classes and icons
+                            $(this)
+                                    .next().addClass('btn btn-success').html('<i class="ace-icon fa fa-plus"></i>')
+                                    .next().addClass('btn btn-danger').html('<i class="ace-icon fa fa-minus"></i>')
+
+                            //larger buttons on touch devices
+                            if ('touchstart' in document.documentElement)
+                                $(this).closest('.ui-spinner').addClass('ui-spinner-touch');
+                        }
+                    });
+
+                    //slider example
+                    $("#slider").slider({
+                        range: true,
+                        min: 0,
+                        max: 500,
+                        values: [75, 300]
+                    });
+
+
+
+                    //jquery accordion
+                    $("#accordion").accordion({
+                        collapsible: true,
+                        heightStyle: "content",
+                        animate: 250,
+                        header: ".accordion-header"
+                    }).sortable({
+                        axis: "y",
+                        handle: ".accordion-header",
+                        stop: function (event, ui) {
+                            // IE doesn't register the blur when sorting
+                            // so trigger focusout handlers to remove .ui-state-focus
+                            ui.item.children(".accordion-header").triggerHandler("focusout");
+                        }
+                    });
+                    //jquery tabs
+                    $("#tabs").tabs();
+
+
+                    //progressbar
+                    $("#progressbar").progressbar({
+                        value: 37,
+                        create: function (event, ui) {
+                            $(this).addClass('progress progress-striped active')
+                                    .children(0).addClass('progress-bar progress-bar-success');
+                        }
+                    });
+
+
+                    //selectmenu
+                    $("#number").css('width', '200px')
+                            .selectmenu({position: {my: "left bottom", at: "left top"}})
+
+                });
+            </script>
+
             <script type="text/javascript">
                 jQuery(function ($) {
                     $('.easy-pie-chart.percentage').each(function () {
@@ -1942,7 +2008,7 @@ while ($ar = mysqli_fetch_array($qry)) {
 
                 })
             </script>
-            
+
             <script type="text/javascript">
                 jQuery(function ($) {
                     $('#id-disable-check').on('click', function () {

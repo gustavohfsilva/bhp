@@ -120,6 +120,15 @@
 
                         <b class="arrow"></b>
                     </li>
+                    
+                    <li class="">
+                        <a href="#modal-form-jackpot" role="button" data-toggle="modal" title="Configurar"> 
+                            <i class="menu-icon fa fa-cube purple"></i>
+                            Jackpot
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
 
 
                 </ul>

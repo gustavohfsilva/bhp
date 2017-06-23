@@ -245,11 +245,7 @@ if (isset($row))
 
                                             <div class="modal-body no-padding">
                                                 <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
-                                                    <thead>
-                                                        <tr>
-                                                            <th><?php global $f_nome; echo $f_nome ?></th>
-                                                    </tr>
-                                                </table>
+                                                   
                                                 <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
                                                     <thead>
                                                         <tr>
@@ -277,14 +273,14 @@ if (isset($row))
             $q = "AND cd_id ='" . $_GET["fidelidade"] . "'";
         }
 
-$sql = "SELECT cd_id, cd_nome, cmp_valor as entrada, cmp_data as data, null as pgt_valor, null as pgt_data FROM cadastro_pessoa cd
-LEFT JOIN cash_entrada ce on ce.cmp_id_jogador = cd_id
-LEFT JOIN cash_saida cs on cs.pgt_id_jogador = cd_id
+$sql = "SELECT cd_id, cd_nome, cmp_valor as entrada, total_entrada, cmp_data as data, null as pgt_valor, null as pgt_data, null as total_saida FROM cadastro_pessoa cd
+LEFT JOIN (SELECT SUM(cmp_valor) as total_entrada, cmp_valor, cmp_data, cmp_f_pg, cmp_id_jogador from cash_entrada) ce on ce.cmp_id_jogador = cd_id
+LEFT JOIN (SELECT SUM(pgt_valor) as total_saida, pgt_valor, pgt_data, pgt_f_pg, pgt_id_jogador from cash_saida) cs on cs.pgt_id_jogador = cd_id
 WHERE cd_tipo='Fidelidade' $q AND ce.cmp_f_pg='4'
 UNION 
-SELECT cd_id, cd_nome, null as cmp_valor, null as cmp_data, pgt_valor as saida, pgt_data as data FROM cadastro_pessoa cd
-LEFT JOIN cash_entrada ce on ce.cmp_id_jogador = cd_id
-LEFT JOIN cash_saida cs on cs.pgt_id_jogador = cd_id
+SELECT cd_id, cd_nome, null as cmp_valor, null as cmp_data, null as total_entrada, pgt_valor as saida, pgt_data, total_saida as data FROM cadastro_pessoa cd
+LEFT JOIN (SELECT SUM(cmp_valor) as total_entrada, cmp_valor, cmp_data, cmp_f_pg, cmp_id_jogador from cash_entrada) ce on ce.cmp_id_jogador = cd_id
+LEFT JOIN (SELECT SUM(pgt_valor) as total_saida, pgt_valor, pgt_data, pgt_f_pg, pgt_id_jogador from cash_saida) cs on cs.pgt_id_jogador = cd_id
 WHERE cd_tipo='Fidelidade' $q AND cs.pgt_f_pg='4'";
     $qry = mysqli_query($conn, $sql);
 
@@ -295,10 +291,11 @@ WHERE cd_tipo='Fidelidade' $q AND cs.pgt_f_pg='4'";
             $f_datae = $ar["data"];
             $f_saida   = $ar["pgt_valor"];
             $f_datas = $ar["pgt_data"];
-            $total = ($f_entrada - $f_saida);
+            $total = ($ar["total_entrada"]- $ar["total_saida"]);
             
             
         ?>
+                                                        
                                                         <tr>
                                                             <td>
                                                                 <?php 
@@ -346,7 +343,7 @@ WHERE cd_tipo='Fidelidade' $q AND cs.pgt_f_pg='4'";
                                                         <tr>
                                                             <td>Total</td>
                                                         
-                                                            <td><?php?></td>
+                                                            <td><?php echo $total?></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
